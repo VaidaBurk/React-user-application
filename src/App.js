@@ -6,16 +6,16 @@ const App = () => {
 
   const [users, setUsers] = useState([]);
 
-  const addUserHandler = user => {
+  const addUserHandler = (username, userAge) => {
     setUsers(prevUsers => {
-      return [user, ...prevUsers];
+      return [{username: username, age: userAge, id: Math.random().toString()},  ...prevUsers];
     });
   }
 
   return (
     <div>
       <UserForm onAddUser={addUserHandler}></UserForm>
-      <UserList items={users}></UserList>
+      <UserList users={users}></UserList>
     </div>
   )
 }

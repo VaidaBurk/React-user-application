@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import AddButton from "../UI/AddButton";
+import Button from "../UI/Button";
 import Card from "../UI/Card";
+import classes from "./UserForm.module.css";
 
 const UserForm = (props) => {
   const [enteredUsername, setEnteredUsername] = useState();
@@ -17,24 +18,22 @@ const UserForm = (props) => {
   const submitHandler = (event) => {
     event.preventDefault();
 
-    if (enteredUsername.trim() === "" || enteredAge === "") {
+    if (enteredUsername.trim().lenght === 0 || enteredAge.trim().lenght === 0) {
         alert("Please enter valid values.")
         return;
     }
 
-    const newUser = {
-      username: enteredUsername,
-      age: enteredAge,
-    };
+    if (+enteredAge < 1){
+        return;
+    }
 
-    console.log(newUser);
-    props.onAddUser(newUser);
+    props.onAddUser(enteredUsername, enteredAge);
     setEnteredUsername("");
     setEnetredAge("");
   };
 
   return (
-    <Card>
+    <Card className={classes.input}>
         <form onSubmit={submitHandler}>
         <div>
             <div>
@@ -51,14 +50,13 @@ const UserForm = (props) => {
             <input
                 id="age"
                 type="number"
-                min="0"
                 step="1"
                 value={enteredAge}
                 onChange={ageChangeHandler}
             ></input>
             </div>
         </div>
-        <AddButton buttonname={'Add User'}></AddButton>
+        <Button type="submit">Add User</Button>
         </form>
     </Card>
   );
