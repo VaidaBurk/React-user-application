@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Button from "../UI/Button";
 import Card from "../UI/Card";
 import classes from "./UserForm.module.css";
@@ -6,34 +6,29 @@ import ErrorModal from "../UI/ErrorModal";
 import Wrapper from "../Helpers/Wrapper";
 
 const UserForm = (props) => {
-  const [enteredUsername, setEnteredUsername] = useState("");
-  const [enteredAge, setEnetredAge] = useState("");
+  const nameInputRef = useRef();
+  const ageInputRef = useRef();
+
   const [error, setError] = useState();
-
-  const usernameChangeHandler = (event) => {
-    setEnteredUsername(event.target.value);
-  };
-
-  const ageChangeHandler = (event) => {
-    setEnetredAge(event.target.value);
-  };
 
   const submitHandler = (event) => {
     event.preventDefault();
+    const enteredName = nameInputRef.current.value;
+    const enteredUserAge = ageInputRef.current.value;
 
-    if (enteredUsername.trim().length === 0 || enteredAge.trim().length === 0) {
+    if (enteredName.trim().length === 0 || enteredUserAge.trim().length === 0) {
       setError({title: "Invalid input", message: "Please enter a valid name and age (non-empty values)."});
       return;
     }
 
-    if (+enteredAge < 1) {
+    if (+enteredUserAge < 1) {
       setError({title: "Invalid age", message: "Please enter a valid age (> 0)."});
       return;
     }
 
-    props.onAddUser(enteredUsername, enteredAge);
-    setEnteredUsername("");
-    setEnetredAge("");
+    props.onAddUser(enteredName, enteredUserAge);
+    nameInputRef.current.value = "";
+    ageInputRef.current.value = "";
   };
 
   const errorHandle = () => {
@@ -51,8 +46,7 @@ const UserForm = (props) => {
               <input
                 id="username"
                 type="text"
-                value={enteredUsername}
-                onChange={usernameChangeHandler}
+                ref={nameInputRef}
               ></input>
             </div>
             <div>
@@ -61,8 +55,7 @@ const UserForm = (props) => {
                 id="age"
                 type="number"
                 step="1"
-                value={enteredAge}
-                onChange={ageChangeHandler}
+                ref={ageInputRef}
               ></input>
             </div>
           </div>
